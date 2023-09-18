@@ -1,3 +1,4 @@
+import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
@@ -7,7 +8,7 @@ import request from 'supertest'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('Fetch recent questions (E2E)', () => {
+describe('Get question by Slug (E2E)', () => {
   let app: INestApplication
   let jwt: JwtService
   let studentFactory: StudentFactory
@@ -20,40 +21,32 @@ describe('Fetch recent questions (E2E)', () => {
     }).compile()
 
     app = moduleRef.createNestApplication()
-    jwt = moduleRef.get<JwtService>(JwtService)
     studentFactory = moduleRef.get<StudentFactory>(StudentFactory)
     questionFactory = moduleRef.get<QuestionFactory>(QuestionFactory)
+    jwt = moduleRef.get<JwtService>(JwtService)
 
     await app.init()
   })
 
-  test('[GET] /questions', async () => {
+  test('[GET] /questions/:slug', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({ sub: user.id.toString() })
 
-    await Promise.all([
-      questionFactory.makePrismaQuestion({
-        authorId: user.id,
-        title: 'Question 1',
-      }),
-      questionFactory.makePrismaQuestion({
-        authorId: user.id,
-        title: 'Question 2',
-      }),
-    ])
+    await questionFactory.makePrismaQuestion({
+      authorId: user.id,
+      title: 'Question 1',
+      slug: Slug.create('question-1'),
+    })
 
     const response = await request(app.getHttpServer())
-      .get('/questions')
+      .get('/questions/question-1')
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(response.statusCode).toBe(200)
     expect(response.body).toEqual({
-      questions: [
-        expect.objectContaining({ title: 'Question 2' }),
-        expect.objectContaining({ title: 'Question 1' }),
-      ],
+      question: expect.objectContaining({ title: 'Question 1' }),
     })
   })
 })

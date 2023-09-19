@@ -18,8 +18,14 @@ import { AnswerAttachmentsRepository } from '@/domain/forum/application/reposito
 @Module({
   providers: [
     PrismaService,
-    { provide: QuestionsRepository, useClass: PrismaQuestionsRepository },
-    { provide: StudentsRepository, useClass: PrismaStudentsRepository },
+    {
+      provide: QuestionsRepository,
+      useClass: PrismaQuestionsRepository,
+    },
+    {
+      provide: StudentsRepository,
+      useClass: PrismaStudentsRepository,
+    },
     {
       provide: QuestionAttachmentsRepository,
       useClass: PrismaQuestionAttachmentsRepository,

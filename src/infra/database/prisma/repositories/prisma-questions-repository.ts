@@ -9,6 +9,20 @@ import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 export class PrismaQuestionsRepository implements QuestionsRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findById(id: string): Promise<Question | null> {
+    const question = await this.prisma.question.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!question) {
+      return null
+    }
+
+    return PrismaQuestionMapper.toDomain(question)
+  }
+
   async create(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
 
@@ -39,20 +53,6 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
         id: data.id,
       },
     })
-  }
-
-  async findById(id: string): Promise<Question | null> {
-    const question = await this.prisma.question.findUnique({
-      where: {
-        id,
-      },
-    })
-
-    if (!question) {
-      return null
-    }
-
-    return PrismaQuestionMapper.toDomain(question)
   }
 
   async findManyRecent({ page }: PaginationParams): Promise<Question[]> {

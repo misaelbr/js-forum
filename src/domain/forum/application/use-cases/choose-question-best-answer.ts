@@ -3,14 +3,14 @@ import { QuestionsRepository } from '../repositories/questions-repository'
 import { Question } from '../../enterprise/entities/question'
 import { Either, left, right } from '@/core/either'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { NotAllowedErrror } from '@/core/errors/not-allowed-error'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
 interface ChooseQuestionBestAnswerUseCaseRequest {
   authorId: string
   answerId: string
 }
 type ChooseQuestionBestAnswerUseCaseResponse = Either<
-  ResourceNotFoundError | NotAllowedErrror,
+  ResourceNotFoundError | NotAllowedError,
   {
     question: Question
   }
@@ -41,7 +41,7 @@ export class ChooseQuestionBestAnswerUseCase {
     }
 
     if (authorId !== question.authorId.toString()) {
-      return left(new NotAllowedErrror())
+      return left(new NotAllowedError())
     }
 
     question.bestAnswerId = answer.id

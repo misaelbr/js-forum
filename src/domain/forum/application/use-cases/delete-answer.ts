@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either'
 import { AnswersRepository } from '../repositories/answers-repository'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
-import { NotAllowedErrror } from '@/core/errors/not-allowed-error'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
 
 interface DeleteAnswerUseCaseRequest {
   authorId: string
@@ -9,7 +9,7 @@ interface DeleteAnswerUseCaseRequest {
 }
 
 type DeleteAnswerUseCaseResponse = Either<
-  ResourceNotFoundError | NotAllowedErrror,
+  ResourceNotFoundError | NotAllowedError,
   null
 >
 
@@ -27,7 +27,7 @@ export class DeleteAnswerUseCase {
     }
 
     if (authorId !== answer.authorId.toString()) {
-      return left(new NotAllowedErrror())
+      return left(new NotAllowedError())
     }
 
     await this.answerRepository.delete(answer)

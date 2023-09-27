@@ -1,11 +1,11 @@
 import { Either, left, right } from '@/core/either'
-import { Question } from '../../enterprise/entities/question'
-import { QuestionsRepository } from '../repositories/questions-repository'
-import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { NotAllowedError } from '@/core/errors/not-allowed-error'
-import { QuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
-import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
-import { QuestionAttachment } from '../../enterprise/entities/question-attachment'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { Question } from '@/domain/forum/enterprise/entities/question'
+import { QuestionsRepository } from '../repositories/questions-repository'
+import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
+import { QuestionAttachmentList } from '@/domain/forum/enterprise/entities/question-attachment-list'
+import { QuestionAttachment } from '@/domain/forum/enterprise/entities/question-attachment'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Injectable } from '@nestjs/common'
 
@@ -51,7 +51,7 @@ export class EditQuestionUseCase {
     const currentQuestionAttachments =
       await this.questionAttachmentsRepository.findManyByQuestionId(questionId)
 
-    const questionAttachmentsList = new QuestionAttachmentList(
+    const questionAttachmentList = new QuestionAttachmentList(
       currentQuestionAttachments,
     )
 
@@ -62,11 +62,11 @@ export class EditQuestionUseCase {
       })
     })
 
-    questionAttachmentsList.update(questionAttachments)
+    questionAttachmentList.update(questionAttachments)
 
+    question.attachments = questionAttachmentList
     question.title = title
     question.content = content
-    question.attachments = questionAttachmentsList
 
     await this.questionsRepository.save(question)
 

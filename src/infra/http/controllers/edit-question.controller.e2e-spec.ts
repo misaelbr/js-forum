@@ -1,4 +1,3 @@
-import { QuestionAttachment } from '@/domain/forum/enterprise/entities/question-attachment'
 import { AppModule } from '@/infra/app.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
@@ -10,7 +9,6 @@ import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
 import { QuestionAttachmentFactory } from 'test/factories/make-question-attachments'
 import { StudentFactory } from 'test/factories/make-student'
-import { promise } from 'zod'
 
 describe('Edit question (E2E)', () => {
   let app: INestApplication

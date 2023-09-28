@@ -10,7 +10,6 @@ import { AnswerAttachmentFactory } from 'test/factories/make-answer-attachments'
 import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
-import { an } from 'vitest/dist/reporters-5f784f42'
 
 describe('Edit answer (E2E)', () => {
   let app: INestApplication

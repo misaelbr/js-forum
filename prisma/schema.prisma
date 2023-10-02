@@ -42,9 +42,9 @@ model Question {
   author     User    @relation(fields: [authorId], references: [id])
   bestAnswer Answer? @relation("bestAnswer", fields: [bestAnswerId], references: [id])
 
-  ansewers   Answer[]
-  comments   Comment[]
-  Attachment Attachment[]
+  ansewers    Answer[]
+  comments    Comment[]
+  attachments Attachment[]
 
   @@map("questions")
 }

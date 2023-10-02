@@ -20,6 +20,10 @@ describe('Comment on Question', () => {
     inMemoryStudentsRepository = new InMemoryStudentsRepository()
     inMemoryAttachmentsRepoitory = new InMemoryAttachmentsRepository()
 
+    inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepository,
+    )
+
     inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository()
 
